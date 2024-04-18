@@ -1,0 +1,74 @@
+name: musinum
+description: "A new Flutter music project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.18.0
+  get: ^4.6.5
+  dio: ^5.1.1
+  connectivity_plus: ^3.0.2
+  url_launcher: ^6.2.6
+  flutter_screenutil: ^5.6.0
+  flutter_svg: ^2.0.10+1
+  fluttertoast: ^8.1.1
+  lottie: ^3.1.0
+  shared_preferences: ^2.0.15
+  cached_network_image: ^3.2.2
+  flutter_cache_manager: ^3.3.0
+  gap: ^3.0.1
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  uni_links: ^0.5.1
+
+  cupertino_icons: ^1.0.6
+  spotify: ^0.13.5
+  audioplayers: ^6.0.0
+  oauth2_client: ^3.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^3.0.0
+  build_runner: ^2.4.8
+  hive_generator: ^2.0.1
+
+flutter:
+
+  uses-material-design: true
+  assets:
+    - lib/src/res/image/png/
+    - lib/src/res/image/svg/
+    - lib/src/res/image/lottie/
+    - lib/src/res/string/
+
+
+  fonts:
+    - family: Century-Gothic
+      fonts:
+        - asset: lib/src/res/font/Century-Gothic-Bold.otf
+          weight: 700
+        - asset: lib/src/res/font/Century-Gothic-Medium.otf
+          weight: 600
+        - asset: lib/src/res/font/Century-Gothic-Regular.otf
+          weight: 500
+    - family: Mulish
+      fonts:
+        - asset: lib/src/res/font/Mulish-Bold.ttf
+          weight: 700
+        - asset: lib/src/res/font/Mulish-Medium.ttf
+          weight: 600
+        - asset: lib/src/res/font/Mulish-Regular.ttf
+          weight: 500
+
+
