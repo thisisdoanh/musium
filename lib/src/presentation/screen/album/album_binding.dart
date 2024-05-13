@@ -1,9 +1,8 @@
 import 'package:get/get.dart';
-import 'package:musinum/src/presentation/screen/playlist/playlist_controller.dart';
 
 import 'album_controller.dart';
 
-class AlbumBinding extends Bindings{
+class AlbumBinding extends Bindings {
   @override
   void dependencies() {
     // TODO: implement dependencies

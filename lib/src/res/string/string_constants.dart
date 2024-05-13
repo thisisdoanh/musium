@@ -18,4 +18,5 @@ class StringConstants{
   static String playlist = 'playlist';
   static String artist = 'artist';
   static String from = 'from';
+  static String mustAcceptAuth = 'mustAcceptAuth';
 }

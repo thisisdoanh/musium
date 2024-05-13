@@ -1,5 +1,12 @@
+import 'package:dio/dio.dart';
+import 'package:get/get.dart';
+import 'package:musinum/src/data/model/base_response.dart';
+import 'package:musinum/src/data/model/lyric_model.dart';
+import 'package:musinum/src/data/provider/api_client.dart';
 import 'package:musinum/src/data/provider/api_constant.dart';
+import 'package:musinum/src/res/string/string_constants.dart';
 import 'package:musinum/src/util/app_log.dart';
+import 'package:musinum/src/util/app_util.dart';
 import 'package:oauth2_client/access_token_response.dart';
 import 'package:oauth2_client/spotify_oauth2_client.dart';
 import 'package:spotify/spotify.dart';
@@ -37,30 +44,40 @@ class ApiService {
   static Future<void> getAuthentication() async {
     AccessTokenResponse? accessToken;
     SpotifyOAuth2Client client = SpotifyOAuth2Client(
-      customUriScheme: 'thisisdoanh.musium.app',
+      customUriScheme: 'my.music.app',
       //Must correspond to the AndroidManifest's "android:scheme" attribute
       redirectUri:
-          'thisisdoanh.musium.app://callback', //Can be any URI, but the scheme part must correspond to the customeUriScheme
+          'my.music.app://callback', //Can be any URI, but the scheme part must correspond to the customeUriScheme
     );
     var authResp = await client.requestAuthorization(
         clientId: ApiConstant.CLIENT_ID,
         customParams: {'show_dialog': 'true'},
         scopes: [...AuthorizationScope.all]);
-    var authCode = authResp.code;
 
-    accessToken = await client.requestAccessToken(
+    AppLog.info(
+        "error:${authResp.error}\ncode:${authResp.code}\nerrorDescription:${authResp.errorDescription}\nqueryParams:${authResp.queryParams}\n${authResp.isAccessGranted()}");
+
+    if (authResp.isAccessGranted()) {
+      var authCode = authResp.code;
+
+      accessToken = await client.requestAccessToken(
         code: authCode.toString(),
         clientId: ApiConstant.CLIENT_ID,
-        clientSecret: ApiConstant.CLIENT_SECRET);
+        clientSecret: ApiConstant.CLIENT_SECRET,
+      );
 
-    ApiConstant.ACCESS_TOKEN = accessToken.accessToken ?? "";
-    ApiConstant.REFRESH_TOKEN = accessToken.refreshToken ?? "";
-    AppLog.info(
-        "ACCESS_TOKEN: ${ApiConstant.ACCESS_TOKEN}\nREFRESH_TOKEN: ${ApiConstant.REFRESH_TOKEN}");
-    if (ApiConstant.ACCESS_TOKEN == "") {
-      spotify = SpotifyApi(credentials);
+      ApiConstant.ACCESS_TOKEN = accessToken.accessToken ?? "";
+      ApiConstant.REFRESH_TOKEN = accessToken.refreshToken ?? "";
+      AppLog.info(
+          "ACCESS_TOKEN: ${ApiConstant.ACCESS_TOKEN}\nREFRESH_TOKEN: ${ApiConstant.REFRESH_TOKEN}");
+      if (ApiConstant.ACCESS_TOKEN == "") {
+        spotify = SpotifyApi(credentials);
+      } else {
+        spotify = SpotifyApi.withAccessToken(ApiConstant.ACCESS_TOKEN);
+      }
     } else {
-      spotify = SpotifyApi.withAccessToken(ApiConstant.ACCESS_TOKEN);
+      showToast(StringConstants.mustAcceptAuth.tr);
+      AppLog.info(StringConstants.mustAcceptAuth.tr);
     }
   }
 
@@ -110,8 +127,38 @@ class ApiService {
 
     return response;
   }
-  
-  static Future startMedia() async {
-    await spotify?.player.addToQueue("7H7RtxRYHIwfhOy8vLxpAw");
+
+  static Future<List<LyricModel>> getLyric(
+      {required String songName, required String artist}) async {
+    BaseResponse response = await ApiClient(
+      options: BaseOptions(
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
+        responseType: ResponseType.plain,
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Content-Type': 'text/html; charset=UTF-8'
+          // "X-RapidAPI-Key": "f7a518daf4msh3c184e00980affap197ee7jsn44dfe3ac6589",
+          // "X-RapidAPI-Host": "spotify23.p.rapidapi.com",
+        },
+      ),
+    ).request(
+      endPoint: "https://paxsenixofc.my.id/server/getLyricsMusix.php",
+      method: ApiClient.GET,
+      queryParameters: {
+        "q": "$songName $artist",
+        "type": "default",
+      },
+      isJson: false,
+    );
+    if (response.result == true &&
+        (response.data as String).isNotEmpty &&
+        !(response.data as String).contains("Fatal error")) {
+      AppLog.info(response.data);
+      return lyricProcessing(response.data);
+    } else {
+      AppLog.info("Not found lyrics");
+      return [];
+    }
   }
 }

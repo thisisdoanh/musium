@@ -4,6 +4,8 @@ import 'package:musinum/src/presentation/screen/main/main_binding.dart';
 import 'package:musinum/src/presentation/screen/main/main_screen.dart';
 import 'package:musinum/src/presentation/screen/playlist/playlist_binding.dart';
 import 'package:musinum/src/presentation/screen/playlist/playlist_screen.dart';
+import 'package:musinum/src/presentation/screen/track/track_binding.dart';
+import 'package:musinum/src/presentation/screen/track/track_screen.dart';
 
 import '../screen/album/album_screen.dart';
 import '../screen/intro/intro_binding.dart';
@@ -45,6 +47,11 @@ class AppPage {
       name: AppRouter.albumScreen,
       page: () => const AlbumScreen(),
       binding: AlbumBinding(),
+    ),
+    GetPage(
+      name: AppRouter.trackScreen,
+      page: () => const TrackScreen(),
+      binding: TrackBinding(),
     ),
   ];
 }

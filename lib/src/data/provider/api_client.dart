@@ -4,7 +4,6 @@ import 'dart:io' as io;
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
-import 'package:musinum/src/data/provider/api_constant.dart';
 
 import '../../util/dio_logger/dio_logger.dart';
 import '../model/base_response.dart';
@@ -25,7 +24,7 @@ class ApiClient {
     responseType: ResponseType.plain,
     headers: {
       'Cache-Control': 'no-cache',
-      'Authorization': 'Bearer ${ApiConstant.ACCESS_TOKEN}'
+      'Content-Type': 'application/json; charset=utf-8'
       // "X-RapidAPI-Key": "f7a518daf4msh3c184e00980affap197ee7jsn44dfe3ac6589",
       // "X-RapidAPI-Host": "spotify23.p.rapidapi.com",
     },
@@ -70,7 +69,7 @@ class ApiClient {
     Map<String, dynamic>? formData,
     Map<String, dynamic>? queryParameters,
     bool getFullResponse = false,
-    bool isEncrypt = true,
+    bool isJson = true,
   }) async {
     var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
@@ -109,7 +108,7 @@ class ApiClient {
               contentType: formData != null ? 'multipart/form-data' : null),
           queryParameters: queryParameters);
       if (_isSuccessful(response?.statusCode ?? -1)) {
-        if (isEncrypt) {
+        if (isJson) {
           dynamic responseData = json.decode(response?.data ?? '');
           Map<String, dynamic> dataOut = {
             'code': 1000,
@@ -122,7 +121,6 @@ class ApiClient {
           if (getFullResponse) apiResponse.dioResponse = response;
           return apiResponse;
         } else {
-          // dynamic responseData = json.decode(response?.data);
           Map<String, dynamic> dataOut = {
             'code': 1000,
             'data': response?.data,
@@ -137,7 +135,7 @@ class ApiClient {
       }
     } on DioException catch (e) {
       if (e.response != null) {
-        // e.response.data có thể trả về _InternalLinkedHashMap hoặc 1 kiểu nào đó (String), tạm thời check thủ công theo runtimeType
+// e.response.data có thể trả về _InternalLinkedHashMap hoặc 1 kiểu nào đó (String), tạm thời check thủ công theo runtimeType
         String errorMessage = e.response?.data != null &&
                 (e.response?.data.runtimeType ?? '')
                     .toString()

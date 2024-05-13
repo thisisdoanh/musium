@@ -17,6 +17,7 @@ class AppHeader extends StatelessWidget {
   final Widget? extendWidget;
   final CrossAxisAlignment? crossAxisAlignmentMainRow;
   final Function()? onPressBack;
+  final TextStyle? titleStyle;
 
   const AppHeader({
     Key? key,
@@ -29,6 +30,7 @@ class AppHeader extends StatelessWidget {
     this.hintContent,
     this.hintTitle,
     this.onPressBack,
+    this.titleStyle,
   }) : super(key: key);
 
   @override
@@ -67,8 +69,9 @@ class AppHeader extends StatelessWidget {
                           fontSize: 14.sp,
                           color: AppColor.white,
                           fontWeight: FontWeight.w400,
+                          
                           letterSpacing: 0.72,
-                        ),
+                        ).merge(titleStyle),
                       ),
                 ),
                 rightWidget ?? SizedBox(width: 40.0.sp),

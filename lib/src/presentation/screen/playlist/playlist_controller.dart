@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:musinum/src/data/service/api_service.dart';
 import 'package:spotify/spotify.dart';
@@ -11,6 +12,8 @@ class PlaylistController extends GetxController {
   RxBool isLoading = false.obs;
 
   final player = AudioPlayer();
+
+  final ScrollController scrollController = ScrollController();
 
   @override
   void onInit() {

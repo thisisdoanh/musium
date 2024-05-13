@@ -18,6 +18,7 @@ const enStrings = {
   "playlist": "Playlist",
   "artist": "Artist",
   "from": "FROM",
+  "mustAcceptAuth": "You must agree to authentication before using the app",
 
 
 };
